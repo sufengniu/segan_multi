@@ -1,0 +1,48 @@
+!_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+create_dir	/home/sniu/lab/ai_lab/segan_multi/main.py	/^def create_dir(dir_path):$/;"	f	language:Python
+devices	/home/sniu/lab/ai_lab/segan/inference.py	/^devices = device_lib.list_local_devices()$/;"	v	language:Python
+devices	/home/sniu/lab/ai_lab/segan/main.py	/^devices = device_lib.list_local_devices()$/;"	v	language:Python
+devices	/home/sniu/lab/ai_lab/segan_multi/main.py	/^devices = device_lib.list_local_devices()$/;"	v	language:Python
+device_lib	/home/sniu/lab/ai_lab/segan/inference.py	/^from tensorflow.python.client import device_lib$/;"	i	language:Python
+device_lib	/home/sniu/lab/ai_lab/segan/main.py	/^from tensorflow.python.client import device_lib$/;"	i	language:Python
+device_lib	/home/sniu/lab/ai_lab/segan_multi/main.py	/^from tensorflow.python.client import device_lib$/;"	i	language:Python
+FLAGS	/home/sniu/lab/ai_lab/segan/inference.py	/^FLAGS = flags.FLAGS$/;"	v	language:Python
+flags	/home/sniu/lab/ai_lab/segan/inference.py	/^flags = tf.app.flags$/;"	v	language:Python
+FLAGS	/home/sniu/lab/ai_lab/segan/main.py	/^FLAGS = flags.FLAGS$/;"	v	language:Python
+flags	/home/sniu/lab/ai_lab/segan/main.py	/^flags = tf.app.flags$/;"	v	language:Python
+FLAGS	/home/sniu/lab/ai_lab/segan_multi/main.py	/^FLAGS = flags.FLAGS$/;"	v	language:Python
+flags	/home/sniu/lab/ai_lab/segan_multi/main.py	/^flags = tf.app.flags$/;"	v	language:Python
+main	/home/sniu/lab/ai_lab/segan/inference.py	/^def main(_):$/;"	f	language:Python
+main	/home/sniu/lab/ai_lab/segan/main.py	/^def main(_):$/;"	f	language:Python
+main	/home/sniu/lab/ai_lab/segan_multi/main.py	/^def main(_):$/;"	f	language:Python
+np	/home/sniu/lab/ai_lab/segan/inference.py	/^import numpy as np$/;"	i	language:Python
+np	/home/sniu/lab/ai_lab/segan/main.py	/^import numpy as np$/;"	i	language:Python
+np	/home/sniu/lab/ai_lab/segan_multi/main.py	/^import numpy as np$/;"	i	language:Python
+os	/home/sniu/lab/ai_lab/segan/inference.py	/^import os$/;"	i	language:Python
+os	/home/sniu/lab/ai_lab/segan/main.py	/^import os$/;"	i	language:Python
+os	/home/sniu/lab/ai_lab/segan_multi/main.py	/^import os$/;"	i	language:Python
+os	/home/sniu/lab/ai_lab/segan_multi/main.py	/^import os.path as osp$/;"	i	language:Python
+osp	/home/sniu/lab/ai_lab/segan_multi/main.py	/^import os.path as osp$/;"	i	language:Python
+pre_emph	/home/sniu/lab/ai_lab/segan/inference.py	/^from data_loader import pre_emph$/;"	i	language:Python
+pre_emph	/home/sniu/lab/ai_lab/segan/main.py	/^from data_loader import pre_emph$/;"	i	language:Python
+pre_emph	/home/sniu/lab/ai_lab/segan_multi/main.py	/^from data_loader import pre_emph$/;"	i	language:Python
+pre_emph_test	/home/sniu/lab/ai_lab/segan/inference.py	/^def pre_emph_test(coeff, canvas_size):$/;"	f	language:Python
+pre_emph_test	/home/sniu/lab/ai_lab/segan/main.py	/^def pre_emph_test(coeff, canvas_size):$/;"	f	language:Python
+pre_emph_test	/home/sniu/lab/ai_lab/segan_multi/main.py	/^def pre_emph_test(coeff, canvas_size):$/;"	f	language:Python
+print_function	/home/sniu/lab/ai_lab/segan/inference.py	/^from __future__ import print_function$/;"	i	language:Python
+print_function	/home/sniu/lab/ai_lab/segan/main.py	/^from __future__ import print_function$/;"	i	language:Python
+print_function	/home/sniu/lab/ai_lab/segan_multi/main.py	/^from __future__ import print_function$/;"	i	language:Python
+SEAE	/home/sniu/lab/ai_lab/segan/inference.py	/^from model import SEGAN, SEAE$/;"	i	language:Python
+SEAE	/home/sniu/lab/ai_lab/segan/main.py	/^from model import SEGAN, SEAE$/;"	i	language:Python
+SEAE	/home/sniu/lab/ai_lab/segan_multi/main.py	/^from model import SEAE$/;"	i	language:Python
+SEGAN	/home/sniu/lab/ai_lab/segan/inference.py	/^from model import SEGAN, SEAE$/;"	i	language:Python
+SEGAN	/home/sniu/lab/ai_lab/segan/main.py	/^from model import SEGAN, SEAE$/;"	i	language:Python
+SEGAN_I	/home/sniu/lab/ai_lab/segan_multi/main.py	/^from model_multi import SEGAN_I, SEGAN_III, SEGAN_IV$/;"	i	language:Python
+SEGAN_III	/home/sniu/lab/ai_lab/segan_multi/main.py	/^from model_multi import SEGAN_I, SEGAN_III, SEGAN_IV$/;"	i	language:Python
+SEGAN_IV	/home/sniu/lab/ai_lab/segan_multi/main.py	/^from model_multi import SEGAN_I, SEGAN_III, SEGAN_IV$/;"	i	language:Python
+tf	/home/sniu/lab/ai_lab/segan/inference.py	/^import tensorflow as tf$/;"	i	language:Python
+tf	/home/sniu/lab/ai_lab/segan/main.py	/^import tensorflow as tf$/;"	i	language:Python
+tf	/home/sniu/lab/ai_lab/segan_multi/main.py	/^import tensorflow as tf$/;"	i	language:Python
+wavfile	/home/sniu/lab/ai_lab/segan/inference.py	/^from scipy.io import wavfile$/;"	i	language:Python
+wavfile	/home/sniu/lab/ai_lab/segan/main.py	/^from scipy.io import wavfile$/;"	i	language:Python
+wavfile	/home/sniu/lab/ai_lab/segan_multi/main.py	/^from scipy.io import wavfile$/;"	i	language:Python
