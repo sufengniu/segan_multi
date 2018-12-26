@@ -173,7 +173,7 @@ class SEGAN_I(Model):
             # be able to set up the variable reuse for all other devices
             # merge along channels and this would be a real batch
             dummy_joint = tf.concat([wavbatch, noisybatch], 2)
-            dummy = discriminator(self, dummy_joint,
+            dummy = discriminator(self, dummy_joint, 'clean_dist',
                                   reuse=False)
 
         G1, G2, H1, H2, z1, z2 = self.generator(noisybatch, is_ref=False, spk=None,
@@ -191,9 +191,9 @@ class SEGAN_I(Model):
 
         # build rl discriminator
         dropout_enable = True if self.decoder_type=='II' else False
-        d_rl_logits = discriminator(self, D_rl_joint, dropout_enable=dropout_enable, reuse=True)
+        d_rl_logits = discriminator(self, D_rl_joint, name='clean_dist', dropout_enable=dropout_enable, reuse=True)
         # build fk G discriminator
-        d_fk_logits = discriminator(self, D_fk_joint, dropout_enable=dropout_enable, reuse=True)
+        d_fk_logits = discriminator(self, D_fk_joint, name='clean_dist', dropout_enable=dropout_enable, reuse=True)
         # make disc variables summaries
         self.d_rl_sum = histogram_summary("d_real", d_rl_logits)
         self.d_fk_sum = histogram_summary("d_fake", d_fk_logits)
@@ -644,7 +644,7 @@ class SEGAN_III(SEGAN_I):
             # be able to set up the variable reuse for all other devices
             # merge along channels and this would be a real batch
             dummy_joint = tf.concat([wavbatch, noisybatch], 2)
-            dummy = discriminator(self, dummy_joint,
+            dummy = discriminator(self, dummy_joint, name='noise_dist',
                                   reuse=False)
 
         G1, G2, H1, H2, z1, z2 = self.generator(noisybatch, is_ref=False, spk=None,
@@ -661,8 +661,8 @@ class SEGAN_III(SEGAN_I):
         D_rl_joint_noise = tf.concat([noisyonlybatch, noisybatch], 2)
         
         # discriminator for noise condition
-        d_rl_logits_noise = discriminator(self, D_rl_joint_noise, dropout_enable=True, reuse=True)
-        d_fk_logits_noise = discriminator(self, D_fk_joint_noise, dropout_enable=True, reuse=True)
+        d_rl_logits_noise = discriminator(self, D_rl_joint_noise, name='noise_dist', dropout_enable=True, reuse=True)
+        d_fk_logits_noise = discriminator(self, D_fk_joint_noise, name='noise_dist', dropout_enable=True, reuse=True)
         # make disc variables summaries
         self.d_fk_noise_sum = histogram_summary("d_fake_noise", d_fk_logits_noise)
         self.d_rl_noise_sum = histogram_summary("d_real_noise", d_rl_logits_noise)
@@ -1038,8 +1038,13 @@ class SEGAN_IV(SEGAN_I):
             # be able to set up the variable reuse for all other devices
             # merge along channels and this would be a real batch
             dummy_joint = tf.concat([wavbatch, noisybatch], 2)
-            dummy = discriminator(self, dummy_joint,
-                                  reuse=False)
+            dummy_clean = discriminator(self, dummy_joint, name='clean_dist',
+                                        reuse=False)
+            if self.decoder_type == 'VI':
+                dummy_joint = tf.concat([wavbatch, noisyonlybatch], 2)
+                dummy_noise = discriminator(self, dummy_joint, name='noise_dist',
+                                            reuse=False)
+            
 
         G1, G2, H1, H2, z1, z2 = self.generator(noisybatch, is_ref=False, spk=None,
                                                 do_prelu=do_prelu)
@@ -1058,9 +1063,9 @@ class SEGAN_IV(SEGAN_I):
         D_rl_joint_noise = tf.concat([noisyonlybatch, noisybatch], 2)
 
         # build rl discriminator
-        d_rl_logits = discriminator(self, D_rl_joint, reuse=True)
+        d_rl_logits = discriminator(self, D_rl_joint, name='clean_dist', reuse=True)
         # build fk G discriminator
-        d_fk_logits = discriminator(self, D_fk_joint, reuse=True)
+        d_fk_logits = discriminator(self, D_fk_joint, name='clean_dist', reuse=True)
         # make disc variables summaries
         self.d_rl_sum = histogram_summary("d_real", d_rl_logits)
         self.d_fk_sum = histogram_summary("d_fake", d_fk_logits)
@@ -1068,8 +1073,13 @@ class SEGAN_IV(SEGAN_I):
         self.gen_summ = histogram_summary('G_wav', G1)
         
         # discriminator for noise condition
-        d_rl_logits_noise = discriminator(self, D_rl_joint_noise, dropout_enable=True, reuse=True)
-        d_fk_logits_noise = discriminator(self, D_fk_joint_noise, dropout_enable=True, reuse=True)
+        if self.decoder_type == 'VI':
+            name_scope = 'noise_dist'
+        else:
+            name_scope = 'clean_dist'
+            
+        d_rl_logits_noise = discriminator(self, D_rl_joint_noise, name=name_scope, dropout_enable=False, reuse=True)
+        d_fk_logits_noise = discriminator(self, D_fk_joint_noise, name=name_scope, dropout_enable=False, reuse=True)
         # d_rl_logits_noise = discriminator(self, D_rl_joint_noise, reuse=True)
         # d_fk_logits_noise = discriminator(self, D_fk_joint_noise, reuse=True)
 
@@ -1118,7 +1128,7 @@ class SEGAN_IV(SEGAN_I):
         self.g_loss_l1_sum = scalar_summary("g_l1_loss", g_l1_loss)
         self.g_loss_adv_sum = scalar_summary("g_adv_loss", g_adv_loss)
 
-        d_rl_loss_only = tf.reduce_mean(tf.squared_difference(d_rl_logits_noise, 1.-self.d_label_smooth))
+        d_rl_loss_only = tf.reduce_mean(tf.squared_difference(d_rl_logits_noise, 1.))
         # d_rl_loss_only = tf.reduce_mean(tf.squared_difference(d_rl_logits_noise, 1.))
         d_fk_loss_only = tf.reduce_mean(tf.squared_difference(d_fk_logits_noise, 0.))
         g_adv_loss_only = tf.reduce_mean(tf.squared_difference(d_fk_logits_noise, 1.))
@@ -1145,7 +1155,7 @@ class SEGAN_IV(SEGAN_I):
         margin = 10.0
         hinge_loss = tf.reduce_mean(tf.square(tf.maximum((margin - d),0)))
         
-        if self.decoder_type == 'V':
+        if self.decoder_type == 'V' or self.decoder_type == 'VI':
             g_loss = g_adv_loss + g_l1_loss + g_adv_loss_only + g_l1_loss_only + hinge_loss
         else:
             g_loss = g_adv_loss + g_l1_loss + g_adv_loss_only + g_l1_loss_only

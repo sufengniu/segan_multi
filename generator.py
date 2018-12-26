@@ -185,26 +185,31 @@ class AEGenerator(object):
                     h_i = leakyrelu(h_i)
 
                 h_i_clean, h_i_noise = None, None
-                if layer_idx == len(segan.g_enc_depths) - 1 and (segan.decoder_type == 'IV' or segan.decoder_type == 'V'):
+                if layer_idx == len(segan.g_enc_depths) - 1 and (segan.decoder_type == 'IV' or segan.decoder_type == 'V' or segan.decoder_type == 'VI'):
                     if is_ref:
                         print('-- Enc: leakyrelu activation --')
                     ################# add by lin ###############
-                    #print (h_i)
                     # h_i_for_clean = tf.layers.Flatten()(h_i)
                     # h_i_for_noise = tf.layers.Flatten()(h_i)
-                    # h_i_clean = leakyrelu(fc(h_i_for_clean, 512, activation_fn=None))
-                    # h_i_noise = leakyrelu(fc(h_i_for_noise, 512, activation_fn=None))
-                    # h_i_for_clean_decoder = leakyrelu(fc(h_i_clean, 8*1024, activation_fn=None))
-                    # h_i_for_noise_decoder = leakyrelu(fc(h_i_noise, 8*1024, activation_fn=None))
-                    # h_i_for_clean_decoder = tf.reshape(h_i_for_clean_decoder, [-1, 8, 1024])
-                    # h_i_for_noise_decoder = tf.reshape(h_i_for_noise_decoder, [-1, 8, 1024])
+                    # h_i_clean = leakyrelu(fc(h_i_for_clean, 8*1024, activation_fn=None))
+                    # h_i_noise = leakyrelu(fc(h_i_for_noise, 8*1024, activation_fn=None))
+                    # h_i_for_clean_decoder = tf.reshape(h_i_clean, [-1, 8, 1024])
+                    # h_i_for_noise_decoder = tf.reshape(h_i_noise, [-1, 8, 1024])
+                    
+                    # memory saving version:
+                    h_i_for_clean = downconv(h_i, 1024, kwidth=kwidth, pool=1,
+                                           init=tf.truncated_normal_initializer(stddev=0.02),
+                                           bias_init=bias_init,
+                                           name='enc_clean')
+                    h_i_for_noise = downconv(h_i, 1024, kwidth=kwidth, pool=1,
+                                           init=tf.truncated_normal_initializer(stddev=0.02),
+                                           bias_init=bias_init,
+                                           name='enc_noise')
+                    h_i_clean = tf.layers.Flatten()(leakyrelu(h_i_for_clean))
+                    h_i_noise = tf.layers.Flatten()(leakyrelu(h_i_for_noise))
+                    h_i_for_clean_decoder = h_i_for_clean
+                    h_i_for_noise_decoder = h_i_for_noise
 
-                    h_i_for_clean = tf.layers.Flatten()(h_i)
-                    h_i_for_noise = tf.layers.Flatten()(h_i)
-                    h_i_clean = leakyrelu(fc(h_i_for_clean, 8*1024, activation_fn=None))
-                    h_i_noise = leakyrelu(fc(h_i_for_noise, 8*1024, activation_fn=None))
-                    h_i_for_clean_decoder = tf.reshape(h_i_clean, [-1, 8, 1024])
-                    h_i_for_noise_decoder = tf.reshape(h_i_noise, [-1, 8, 1024])
                     #print (h_i_for_noise_decoder)
                     ######################################################
 

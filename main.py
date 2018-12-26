@@ -102,11 +102,11 @@ def main(_):
         if FLAGS.model == 'gan':
             print('Creating GAN model')
             if FLAGS.decoder_type == 'I' or FLAGS.decoder_type == 'II':
-                se_model = SEGAN_I(sess, FLAGS, udevices)
+                se_model = SEGAN_I(sess, FLAGS, udevices, name='SEGAN_'+FLAGS.decoder_type)
             elif FLAGS.decoder_type == 'III':
-                se_model = SEGAN_III(sess, FLAGS, udevices)
+                se_model = SEGAN_III(sess, FLAGS, udevices, name='SEGAN_'+FLAGS.decoder_type)
             else:
-                se_model = SEGAN_IV(sess, FLAGS, udevices)
+                se_model = SEGAN_IV(sess, FLAGS, udevices, name='SEGAN_'+FLAGS.decoder_type)
         elif FLAGS.model == 'ae':
             print('Creating AE model')
             se_model = SEAE(sess, FLAGS, udevices)

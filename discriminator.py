@@ -6,7 +6,7 @@ from ops import *
 import numpy as np
 
 
-def discriminator(self, wave_in, dropout_enable=False, reuse=False):
+def discriminator(self, wave_in, name, dropout_enable=False, reuse=False):
         """
         wave_in: waveform input
         """
@@ -21,9 +21,7 @@ def discriminator(self, wave_in, dropout_enable=False, reuse=False):
         batch_size = int(wave_in.get_shape()[0])
 
         # set up the disc_block function
-        with tf.variable_scope('d_model') as scope:
-            if reuse:
-                scope.reuse_variables()
+        with tf.variable_scope('d_'+name, reuse=tf.AUTO_REUSE) as scope:
             def disc_block(block_idx, input_, kwidth, nfmaps, bnorm, activation,
                            pooling=2):
                 with tf.variable_scope('d_block_{}'.format(block_idx)):
@@ -58,6 +56,7 @@ def discriminator(self, wave_in, dropout_enable=False, reuse=False):
                         raise ValueError('Unrecognized activation {} '
                                          'in D'.format(activation))
                     return hi
+
             beg_size = self.canvas_size
             # apply input noisy layer to real and fake samples
             hi = gaussian_noise_layer(hi, self.disc_noise_std)
